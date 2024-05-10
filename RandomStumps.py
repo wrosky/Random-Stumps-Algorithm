@@ -3,7 +3,7 @@ from sklearn.base import BaseEstimator, ClassifierMixin
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.datasets import load_iris, load_breast_cancer, load_diabetes # Importowanie database'a iris do eksperymentu
 from sklearn.model_selection import train_test_split, cross_val_score
-from sklearn.metrics import accuracy_score, recall_score, precision_score
+from sklearn.metrics import accuracy_score, recall_score, precision_score, ConfusionMatrixDisplay, confusion_matrix
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -64,6 +64,7 @@ random_stumps = RandomStumps(n_stumps=10) # Tworzenie RandomStumps z 10 pniami
 random_stumps.fit(X_train, y_train) # Dopasowanie modelu na podstawie danych treningowych
 
 y_pred = random_stumps.predict(X_test) # Przewidywanie erykiet za pomocą danych testowych
+cm = confusion_matrix(y_test, y_pred)
 accuracy = accuracy_score(y_test, y_pred, normalize=True)
 recall = recall_score(y_test, y_pred, average='weighted')
 precision = precision_score(y_test, y_pred, average='weighted', zero_division=1)
@@ -77,6 +78,9 @@ print(f'Precision: {precision}')
 cv_score = cross_val_score(random_stumps, X, y, cv=10) # Obliczanie dokładności modelu za pomocą walidacji krzyżowej
 print(f'Cross validation score: {cv_score}')
 print(f'Cross validation score mean: {np.mean(cv_score)}')
+
+cm_display = ConfusionMatrixDisplay(cm).plot()
+plt.show()
 
 # plt.figure(figsize=(10, 6))
 # plt.scatter(y_test, y_pred, alpha=0.5)
